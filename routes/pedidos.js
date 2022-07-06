@@ -3,7 +3,7 @@ const router = express.Router();
 
 //Listando todos os pedidos
 router.get('/', (req, res, next) => {
-    return res.status(200).send({message: "Usando GET dentro da rota de pedidoso"})
+    return res.status(200).send({message: "Retornando todos os pedidos"})
 });
 
 //Listando apenas o pedido selecionado pelo id
@@ -12,12 +12,12 @@ router.get('/:id_pedidos', (req,res) => {
     
     if (id === "especial"){
         res.status(200).send({ 
-            message:"pedidos com id especial",
+            message:"Retornando pedido com id especial",
             id:id,
         });
     }else {
         res.status(200).send({
-            message:"Trazendo o pedidoso escolhido pelo index",
+            message:"Retornando pedido",
             id:id,
         });
     }
@@ -26,19 +26,19 @@ router.get('/:id_pedidos', (req,res) => {
 //Alterando um pedido
 router.patch('/', (req,res) => {
    res.status(201).send({
-    message: "Usando o patch dentro da rota do pedidos",
+    message: "Alterando o pedido",
    });
 });
 
 //Criando um pedido
 router.post('/', (req,res) => {
-    return res.status(201).send({message: "Usando POST dentro da rota de pedidos"})
+    return res.status(201).send({message: "Criando o pedido"})
 });
 
 //Deletando um pedido
 router.delete('/', (req,res) => {
     res.status(201).send({
-        message:"Fazendo um Delete na rota de pedidos"
+        message:"Deletando o pedido"
     });
 });
 
