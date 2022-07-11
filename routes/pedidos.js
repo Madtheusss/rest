@@ -7,13 +7,13 @@ router.get('/', (req, res, next) => {
 });
 
 //Listando apenas o pedido selecionado pelo id
-router.get('/:id_pedidos', (req,res) => {
+router.get('/:id_pedido', (req,res) => {
     const id = req.params.id_pedidos;
     
     if (id === "especial"){
         res.status(200).send({ 
             message:"Retornando pedido com id especial",
-            id:id,
+            id_pedido:id,
         });
     }else {
         res.status(200).send({
@@ -32,7 +32,15 @@ router.patch('/', (req,res) => {
 
 //Criando um pedido
 router.post('/', (req,res) => {
-    return res.status(201).send({message: "Criando o pedido"})
+
+    const pedido = {
+        id_produto: req.body.id_produto,
+        quantidade: req.body.quantidade
+    };
+    res.status(201).send({
+        message: "Insere o pedido",
+        pedidoCriado: pedido
+    })
 });
 
 //Deletando um pedido

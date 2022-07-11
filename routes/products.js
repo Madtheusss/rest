@@ -4,8 +4,8 @@ const router = express.Router();
 // Listando todos os produtos 
 router.get('/', (req, res) => {
     res.status(200).send({
-        message: "Retornando todos os produtos"
-    })
+        message: "Retornando todos os produtos",
+    });
 });
 
 //Listando apenas o produto escolhido por id
@@ -33,8 +33,15 @@ router.patch('/', (req,res) => {
 
 //Criando um novo produto
 router.post('/', (req,res) => {
+
+    const produto = {
+        nome: req.body.nome,
+        preco: req.body.preco
+    };
+
     res.status(201).send({
-        message: "Criando um novo produto"
+        message: "Criando um novo produto",
+        produtoCriado: produto
     })
 });
 
