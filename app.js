@@ -13,7 +13,7 @@ app.use(bodyParser.json()); //Acentando apenas json no body
 
 //CORS
 app.use((req,res,next) => {
-    res.header('Access-Control-Allow-Origin', '*') //Aceitando todos os servidores de acesso
+    res.header('Access-Control-Allow-Origin', '*') //Aceitando todos os servidores de acesso (obs: não recomendado)
     res.header( //Propriedades de cabeçalho
         'Access-Control-Allow-Header',
         'Origin','X-Requested-With','Content-Type','Accept','Authorization'
@@ -27,7 +27,7 @@ app.use((req,res,next) => {
 });
 
 //Chamando as rotas
-app.use('/products', productRoute);
+app.use('/produtos', productRoute);
 app.use('/pedidos', pedidosRoute );
 
 
