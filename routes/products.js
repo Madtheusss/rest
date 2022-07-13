@@ -10,7 +10,10 @@ router.get('/', (req, res) => {
             "SELECT * FROM produtos",
             (error, resultado, fields) => {
                 if (error) { return res.status(500).send({ error: error }) }
-                res.status(200).send({ response: resultado })
+                res.status(200).send({ 
+                    response: resultado,
+                    message: "Listagem dos produtos concluida!"
+                });
             }
         )
     })
@@ -27,10 +30,13 @@ router.get('/:id_produto', (req, res) => {
                 if (error) {
                     return res.status(500).send({ error: error })
                 } else {
-                    res.status(200).send({ response: resultado })
+                    res.status(200).send({ 
+                        response: resultado,
+                        message: "Listagem do produto concluida!"
+                    });
                 }
             }
-        )
+        );
     })
 });
 
@@ -52,10 +58,13 @@ router.patch('/', (req, res) => {
                 if (error) {
                     return res.status(500).send({ error: error })
                 } else {
-                    res.status(202).send({ message: "Produto alterado com sucesso" })
+                    res.status(202).send({ 
+                        response: resultado,
+                        message: "Produto alterado com sucesso!"
+                     });
                 }
             }
-        )
+        );
     });
 });
 
@@ -71,10 +80,13 @@ router.post('/', (req, res) => {
                 if (error) {
                     return res.status(500).send({ error: error })
                 } else {
-                    res.status(200).send({ response: resultado })
+                    res.status(200).send({
+                        response: resultado,
+                        message: "Produto criado com Sucesso!"
+                    });
                 }
             }
-        )
+        );
     });
 });
 
@@ -85,11 +97,17 @@ router.delete('/', (req, res) => {
         conn.query(
             "DELETE FROM produtos WHERE id_produto = ?", [req.body.id_produto],
             (error, resultado, field) => {
-                if (error) { return res.status(500).send({ error: error }) }
-                res.status(200).send({ response: resultado })
+                if (error) { 
+                    return res.status(500).send({ error: error }) 
+                }else{
+                    res.status(201).send({
+                        response: resultado,
+                        message: "Produto deletado com Sucesso!"
+                    });
+                }
             }
-        )
-    })
+        );
+    });
 });
 
 module.exports = router;

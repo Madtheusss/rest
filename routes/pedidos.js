@@ -1,53 +1,111 @@
 const express = require('express');
 const router = express.Router();
+const mysql = require('../mysql').pool;
 
 //Listando todos os pedidos
 router.get('/', (req, res, next) => {
-    return res.status(200).send({message: "Retornando todos os pedidos"})
-});
-
-//Listando apenas o pedido selecionado pelo id
-router.get('/:id_pedido', (req,res) => {
-    const id = req.params.id_pedidos;
-    
-    if (id === "especial"){
-        res.status(200).send({ 
-            message:"Retornando pedido com id especial",
-            id_pedido:id,
-        });
-    }else {
-        res.status(200).send({
-            message:"Retornando pedido",
-            id:id,
-        });
-    }
-});
-
-//Alterando um pedido
-router.patch('/', (req,res) => {
-   res.status(201).send({
-    message: "Alterando o pedido",
-   });
-});
-
-//Criando um pedido
-router.post('/', (req,res) => {
-
-    const pedido = {
-        id_produto: req.body.id_produto,
-        quantidade: req.body.quantidade
-    };
-    res.status(201).send({
-        message: "Insere o pedido",
-        pedidoCriado: pedido
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            "SELECT * FROM pedidos",
+            (error, resultado, fields) => {
+                if (error) {
+                    return res.status(500).send({ error: error })
+                } else {
+                    res.status(200).send({
+                        response: resultado,
+                        message: "Listagem de pedido feita!"
+                    });
+                }
+            }
+        )
     })
 });
 
-//Deletando um pedido
-router.delete('/', (req,res) => {
-    res.status(201).send({
-        message:"Deletando o pedido"
+//Listando apenas o pedido selecionado pelo id
+router.get('/:id_pedido', (req, res) => {
+    mysql.getConnection((error, conn) => {
+        if (error) { res.status(500).send({ error: error }) }
+        conn.query(
+            "SELECT * FROM pedidos WHERE id_pedido = ?",
+            [req.params.id_pedido],
+            (error, resultado, field) => {
+                if (error) {
+                    res.status(500).send({ error: error });
+                } else {
+                    res.status(200).send({
+                        response: resultado,
+                        message: "Listagem de pedido feita!"
+                    });
+                }
+            }
+        )
+    })
+});
+
+//Alterando um pedido
+router.patch('/', (req, res) => {
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            `UPDATE pedidos SET quantidade = ?
+            WHERE id_pedido= ?`,
+            [req.body.quantidade, req.body.id_pedido],
+            (error, resultado, field) => {
+                if (error) {
+                    res.status(500).send({ error: error })
+                } else {
+                    res.status(201).send({
+                        response: resultado,
+                        message: "Pedido Alterado com Sucesso!"
+                    });
+                }
+            }
+        );
+    })
+});
+
+//Criando um pedido
+router.post('/', (req, res) => {
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            "INSERT INTO pedidos (id_produto, quantidade) VALUES (?, ?)",
+            [req.body.id_produto, req.body.quantidade],
+            (error, resultado, field) => {
+                conn.release();
+                if (error) {
+                    return res.status(500).send({ error: error })
+                } else {
+                    res.status(200).send({
+                        response: resultado,
+                        message: "Pedido Criado com Sucesso!"
+                    });
+                }
+            }
+        );
     });
+});
+
+//Deletando um pedido
+router.delete('/', (req, res) => {
+    mysql.getConnection((error, conn) => {
+        if (error) { return res.status(500).send({ error: error }) }
+        conn.query(
+            "DELETE FROM pedidos WHERE id_pedido = ?",
+            [req.body.id_pedido],
+            (error, resultado, field) => {
+                if (error) {
+                    res.status(500).send({ error: error })
+                } else {
+                    res.status(201).send({
+                        response: resultado,
+                        message: "Pedido deletado com sucesso!"
+                    });
+                }
+            }
+        );
+    })
 });
 
 module.exports = router
